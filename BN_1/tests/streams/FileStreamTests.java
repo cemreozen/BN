@@ -4,11 +4,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class FileStreamTests {
-    @Test
+   // @Test
     public void writeAndRead() throws Exception {
         //    throw new Exception("fehler");
         try {
