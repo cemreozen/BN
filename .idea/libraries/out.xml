@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="out">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/BN_1/out/BNTestPeer.jar!/" />
+      <root url="jar://$PROJECT_DIR$/BN_1/out/BN_1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
