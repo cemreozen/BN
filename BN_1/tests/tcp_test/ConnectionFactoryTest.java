@@ -13,7 +13,7 @@ public class ConnectionFactoryTest {
     public static final int PORT = 7777;
     public int writeValue = 232;
 
-   // @Test
+   @Test
     public void testConnectionFactory() {
         try {
             ConnectionFactory cf = new ConnectionFactory(new EchoProtocol());
@@ -23,7 +23,7 @@ public class ConnectionFactoryTest {
         }
     }
 
-   // @Test
+   @Test
     public void connectConnectionFactory() throws IOException {
         try {
             Socket sock = new Socket("localhost", PORT);

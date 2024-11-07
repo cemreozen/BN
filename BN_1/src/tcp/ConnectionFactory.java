@@ -1,5 +1,7 @@
 package tcp;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -27,7 +29,10 @@ public class ConnectionFactory {
             Socket socket = serverSocket.accept();
             System.out.println("mit " + connectionPort + " Verbunden <3");
 
-            this.connectionHandler.handleConnection(socket.getInputStream(), socket.getOutputStream());
+            this.connectionHandler.handleDataConnection(new DataInputStream(socket.getInputStream()),
+                    new DataOutputStream(socket.getOutputStream()));
+            //this.connectionHandler.handleConnection(socket.getInputStream(),
+            //      socket.getOutputStream());
 //            handleConnection(socket);
         } catch (IOException e) {
             System.out.println("IO Exception" + e.getMessage());

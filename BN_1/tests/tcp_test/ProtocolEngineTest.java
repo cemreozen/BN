@@ -19,6 +19,7 @@ public class ProtocolEngineTest {
             System.out.println(e.getMessage());
         }
     }
+
     @Test
     public void testEchoProtocol() throws IOException {
         Socket socket = new Socket("localhost", 7777);
@@ -31,4 +32,3 @@ public class ProtocolEngineTest {
         Assertions.assertEquals(send, read);
     }
 }
-
