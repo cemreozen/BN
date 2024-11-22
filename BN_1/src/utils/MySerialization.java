@@ -5,11 +5,10 @@ import java.io.*;
 public class MySerialization {
 
     public void serialize(int[] intArray, OutputStream out) throws IOException {
-        int length = intArray.length;
         DataOutputStream dos = new DataOutputStream(out);
-        dos.writeInt(length);
+        dos.writeInt(intArray.length);
         for (int j : intArray) {
-            System.out.println("written: " + j);
+            //System.out.println("written: " + j);
             out.write(j);
         }
     }
@@ -19,31 +18,40 @@ public class MySerialization {
         int length = dis.readInt();
         int[] intArray = new int[length];
         for (int i = 0; i < length; i++) {
-            intArray[i] = in.read();
-            System.out.println("read: " + intArray[i]);
+            intArray[i] = dis.readInt();
+            //System.out.println("read: " + intArray[i]);
         }
         return intArray;
     }
 
-    public void fileMagicEfficient1(String fileName, InputStream is, OutputStream os) throws IOException {
+    public void fileMagicWriteFromFile(String fileName, OutputStream os) throws IOException {
         try {
-            String name = fileName;
             File file = new File(fileName);
             DataOutputStream dos = new DataOutputStream(os);
-            dos.writeLong(file.length());
-            is = new FileInputStream(file);
-            os.write(is.read());
+            long length = file.length();
+            dos.writeLong(length);
+            FileInputStream fis = new FileInputStream(file);
+            for (int i = 0; i < length; i++) {
+                os.write(fis.read());
+            }
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
         }
     }
 
-    public void fileMagicEfficient2(String fileName, InputStream is, OutputStream os) throws IOException {
+    public File fileMagicWriteToFile(String fileName, InputStream is, OutputStream os) throws IOException {
         DataInputStream dis = new DataInputStream(is);
+        DataOutputStream dos = new DataOutputStream(os);
         long length = dis.readLong();
-        String fileNameTarget = fileName;
-        FileOutputStream fos = new FileOutputStream(fileNameTarget);
-        os.write((int) length); //warum benutz ich das nicht? und auch keine schleife... ??
-        fos.write(is.read());
+        File file = new File(fileName);
+        FileOutputStream fos = new FileOutputStream(fileName);
+        dos.writeLong(length);
+        for (int i = 0; i < length; i++)
+            fos.write(dis.read());
+        return file;
+    }
+
+        public void streamMagic(long laenge, InputStream is, OutputStream os) throws IOException {
+        os.write(is.read());
     }
 }

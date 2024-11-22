@@ -22,5 +22,4 @@ public class fileTest {
         // hier geschieht leider *noch* keine Magie....... :\
 
         }
-    }
 }
