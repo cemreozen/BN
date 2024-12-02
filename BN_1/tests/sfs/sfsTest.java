@@ -14,7 +14,7 @@ public class sfsTest {
     //private static final String NOT_EXISTING_FILE_NAME = ;
     //private static final int TEST_BYTES = ;
     //private static final String PUT_FILE_NAME = ;
-    private static final String ROOT_DIR = "~/Schreibtisch";
+    private static final String ROOT_DIR = "./";
 
     @Test
    public void testGet() throws IOException {

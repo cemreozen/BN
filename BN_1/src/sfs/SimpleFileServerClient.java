@@ -33,15 +33,17 @@ public class SimpleFileServerClient {
 
         dout.writeByte(VERSION);
         dout.writeByte(GET_PDU);
+        dout.writeUTF(fileName);
         byte version = din.readByte();
         byte command = din.readByte();
-        System.out.println(command);
-        if (command == PUT_PDU) {
+        String source = din.readUTF();
+        // System.out.println(command);
+       // if (command == PUT_PDU) {
             MySerialization ms = new MySerialization();
             ms.fileMagicWriteToFile(fileName, is, os);
-        } else {
-            System.err.println("File not found. Cry about it.");
-        }
+        //} else {
+         //   System.err.println("File not found. Cry about it.");
+       // }
     }
 
     public void putFile(String fileName) throws IOException {
