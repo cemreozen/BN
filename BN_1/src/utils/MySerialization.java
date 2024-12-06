@@ -1,5 +1,6 @@
 package utils;
 
+import javax.xml.crypto.Data;
 import java.io.*;
 
 public class MySerialization {
@@ -52,6 +53,7 @@ public class MySerialization {
     }
 
         public void streamMagic(long laenge, InputStream is, OutputStream os) throws IOException {
-        os.write(is.read());
+        for (int l = 0; l < laenge; l++)
+            os.write(is.read());
     }
 }

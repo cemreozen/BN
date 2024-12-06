@@ -3,19 +3,23 @@ package sfs;
 import utils.MySerialization;
 
 import java.io.*;
-import java.net.Socket;
-import java.sql.SQLOutput;
 
-public class SimpleFileServerClient {
+public class SimpleFileServerClient implements sfsProtocolHandler {
     static final byte GET_PDU = 0x00;
     static final byte PUT_PDU = 0x01;
-    static final byte ERROR = 0x02;
-    static final byte OK = 0x03;
+//    static final byte ERROR = 0x02;
+//    static final byte OK = 0x03;
     static final byte VERSION = 1;
 
     InputStream is;
     OutputStream os;
     private static String rootDir;
+
+    public static void writeHeader(DataOutputStream dout, byte pdu, String filename) throws IOException {
+        dout.writeByte(VERSION);
+        dout.writeByte(pdu);
+        dout.writeUTF(filename);
+    }
 
     public SimpleFileServerClient(String rootDirName, InputStream in, OutputStream out) {
         rootDir = rootDirName;
@@ -31,19 +35,14 @@ public class SimpleFileServerClient {
         DataInputStream din = new DataInputStream(is);
         DataOutputStream dout = new DataOutputStream(os);
 
-        dout.writeByte(VERSION);
-        dout.writeByte(GET_PDU);
-        dout.writeUTF(fileName);
-        byte version = din.readByte();
+        writeHeader(dout, GET_PDU, fileName);
         byte command = din.readByte();
-        String source = din.readUTF();
-        // System.out.println(command);
-       // if (command == PUT_PDU) {
-            MySerialization ms = new MySerialization();
-            ms.fileMagicWriteToFile(fileName, is, os);
-        //} else {
-         //   System.err.println("File not found. Cry about it.");
-       // }
+        if (command == PUT_PDU)
+            handleGET(fileName);
+
+        // MySerialization ms = new MySerialization();
+        // ms.fileMagicWriteToFile(fileName, is, os);
+
     }
 
     public void putFile(String fileName) throws IOException {
@@ -52,11 +51,29 @@ public class SimpleFileServerClient {
 
         File file = new File(fileName);
         //header:
-        dos.writeByte(VERSION);
-        dos.writeByte(PUT_PDU);
-        dos.writeUTF(fileName);
+        writeHeader(dos, PUT_PDU, fileName);
         //PUT-PDU -> length etc.
             MySerialization ms = new MySerialization();
             ms.fileMagicWriteFromFile(fileName, os);
         }
+
+    @Override
+    public void handlePUT(String fileName) {
+
     }
+
+    @Override
+    public void handleGET(String fileName) {
+
+    }
+
+    @Override
+    public void handleERROR(String filename) {
+
+    }
+
+    @Override
+    public void handleOK(String fileName) {
+        //ok was soll ich tun mach weiter
+    }
+}
