@@ -1,4 +1,6 @@
-package sfs;
+package sfs.server;
+
+import sfs.sfsProtocolHandler;
 
 import java.io.*;
 import java.net.Socket;
@@ -16,8 +18,8 @@ public class SFSProtocol {
     }
 
     public void readPDU(DataInputStream dis, sfsProtocolHandler sfsProtocolHandler) throws IOException {
-        if (dis.readInt() != VERSION) {
-            System.err.println("Wrong version. Current version: " + VERSION + "Abort.");
+        if (dis.readByte() != VERSION) {
+            System.err.println("Wrong version. Current version: " + VERSION + " Abort.");
             System.exit(-1);
         }
         byte command = dis.readByte();
@@ -45,9 +47,14 @@ public class SFSProtocol {
 
     public static void sendPUT(String fileName, File file, DataOutputStream dout) throws IOException {
         writeHeader(dout, PUT_PDU, fileName);
+        System.out.println("Server: sending file length next");
+
         long fileSize = file.length();
+        System.out.println("Server: sends length " + fileSize + " of file: " + fileName);
+
         dout.writeLong(fileSize);
-        streamBytes(fileSize, new FileInputStream(file), dout);
+
+       // streamBytes(fileSize, new FileInputStream(file), dout);
     }
 
     public static void sendGET(String fileName, DataOutputStream dout) throws IOException {
@@ -69,4 +76,10 @@ public class SFSProtocol {
             out.write(in.read());
         }
     }
+
+    //@Override
+    //public void run() {
+        //"start with socket"
+
+ //   }
 }

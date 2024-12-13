@@ -1,22 +1,23 @@
-package sfs;
+package sfs.server;
+
+import sfs.sfsProtocolHandler;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class SimpleFileServer extends Thread implements sfsProtocolHandler {
 
     public static int FILE_DOESNT_EXIST = 100;
     public static int MISC_PROBLEM = 101;
-    private InputStream is;
+    private final InputStream is;
     private final DataInputStream dis;
     private final DataOutputStream dos;
     private final Socket socket;
 
     public SimpleFileServer(Socket socket) throws IOException {
         this.socket = socket;
-        this.dis = new DataInputStream(socket.getInputStream());
+        this.is = socket.getInputStream();
+        this.dis = new DataInputStream(this.is);
         this.dos = new DataOutputStream(socket.getOutputStream());
     }
 
@@ -44,12 +45,12 @@ public class SimpleFileServer extends Thread implements sfsProtocolHandler {
     @Override
     public void handlePUT(String fileName) throws IOException {
         File file = new File(fileName);
-        while (file.exists()) {
-            System.out.println("A file already exists under this name. Please rename the file:");
-            Scanner scn = new Scanner(System.in);
-            fileName = scn.nextLine();
-            file = new File(fileName);
-            scn.close();
+        if (file.exists()) {
+            System.out.println("A file already exists under this name. Please rename the file.");
+//            Scanner scn = new Scanner(System.in);
+//            fileName = scn.nextLine();
+//            file = new File(fileName);
+//            scn.close();
         }
         try {
             FileOutputStream fos = new FileOutputStream(file);
@@ -66,21 +67,26 @@ public class SimpleFileServer extends Thread implements sfsProtocolHandler {
     @Override
     public void handleGET(String fileName) throws IOException {
         File file = new File(fileName);
-        if (file.exists()) {
-            System.out.println("File exists, getting: " + fileName);
-            SFSProtocol.sendPUT(fileName, file, this.dos);
-            System.out.println("success ? o_O");
-        } else {
-            System.out.println("No such file: " + fileName + "\nDo you want to try another file name? y/n");
 
+        if (file.exists()) {
+            System.out.println("Server: File exists, getting: " + fileName);
+
+            SFSProtocol.sendPUT(fileName, file, this.dos);
+
+            //     System.out.println("success ? o_O");
+            // } else {
+            //    System.out.println("No such file: " + fileName + "\nDo you want to try another file name? y/n");
+/*
             Scanner scn = new Scanner(System.in);
             if (scn.nextLine().equals("y")) {
                 fileName = scn.nextLine();
                 scn.close();
                 handleGET(fileName);
             }
+
+ */
+        } else
             SFSProtocol.sendERROR(fileName, (byte) FILE_DOESNT_EXIST, "File does not exist", this.dos);
-        }
     }
 
     @Override

@@ -42,7 +42,9 @@ public class MySerialization {
     public File readFromDataInputStreamWriteToFile(String fileName, InputStream is, OutputStream os) throws IOException {
         DataInputStream dis = new DataInputStream(is);
         DataOutputStream dos = new DataOutputStream(os);
+
         long length = dis.readLong();
+
         File file = new File(fileName);
         FileOutputStream fos = new FileOutputStream(fileName);
         dos.writeLong(length);

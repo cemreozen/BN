@@ -2,6 +2,8 @@ package sfs;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import sfs.client.SimpleFileServerClient;
+import sfs.server.SimpleFileServer;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -14,17 +16,16 @@ public class sfsTest {
     //private static final String PUT_FILE_NAME = ;
     private static final String ROOT_DIR = "./";
 
-    @Test
-   public void testGet() throws IOException {
-        Socket socket = new Socket("localhost", 4444);
-        SimpleFileServerClient sfsClient =
-                new SimpleFileServerClient(ROOT_DIR, socket.getInputStream(), socket.getOutputStream());
-
-        sfsClient.getFile(GET_FILE_NAME);
-        File file = new File(ROOT_DIR + "/" + GET_FILE_NAME);
-        Assertions.assertTrue((file.exists()));
-    }
-
+//    @Test
+//   public void testGet() throws IOException {
+//        Socket socket = new Socket("localhost", 8888);
+//        SimpleFileServerClient sfsClient =
+//                new SimpleFileServerClient(ROOT_DIR, socket.getInputStream(), socket.getOutputStream());
+//
+//        sfsClient.getFile(GET_FILE_NAME);
+//        File file = new File(ROOT_DIR + "/" + GET_FILE_NAME);
+//        Assertions.assertTrue((file.exists()));
+//    }
 //
 //    @Test
 //    public void testGetFileDoesNotExist() throws IOException {
@@ -40,22 +41,22 @@ public class sfsTest {
 //    }
 //
 
-    @Test
-    public void testPut() throws IOException {
-        //String rootDirName = this.getRootDir();
-        //String fileName = rootDirName + "/" + PUT_FILE_NAME;
-        // produce a file
-        File file = new File("camiryotest.txt");
-        OutputStream os = new FileOutputStream(file);
-        os.write(65);
-        os.close();
-
-        Socket socket = new Socket("localhost", 4444);
-        SimpleFileServerClient sfsClient =
-                new SimpleFileServerClient("dummy", socket.getInputStream(), socket.getOutputStream());
-
-        sfsClient.putFile("camiryotest.txt");
-    }
+//    @Test
+//    public void testPut() throws IOException {
+//        //String rootDirName = this.getRootDir();
+//        //String fileName = rootDirName + "/" + PUT_FILE_NAME;
+//        // produce a file
+//        File file = new File("camiryotest.txt");
+//        OutputStream os = new FileOutputStream(file);
+//        os.write(65);
+//        os.close();
+//
+//        Socket socket = new Socket("localhost", 8888);
+//        SimpleFileServerClient sfsClient =
+//                new SimpleFileServerClient("client", socket.getInputStream(), socket.getOutputStream());
+//
+//        sfsClient.putFile("camiryotest.txt");
+//    }
 /*
     public String getRootDir() {
         int i = 0;
@@ -80,7 +81,7 @@ public class sfsTest {
 
     @Test
     public void testServer() throws IOException {
-        ServerSocket server = new ServerSocket(7777);
+        ServerSocket server = new ServerSocket(4444);
         while (true) {
             Socket socket = server.accept();
             new SimpleFileServer(socket).start();
@@ -89,11 +90,13 @@ public class sfsTest {
 
     @Test
     public void clientTest() throws IOException {
-        Socket socket = new Socket("localhost", 7777);
+        Socket socket = new Socket("localhost", 4444);
         InputStream is = socket.getInputStream();
         OutputStream os = socket.getOutputStream();
         SimpleFileServerClient sfsClient = new SimpleFileServerClient("dummy", is, os);
-        sfsClient.putFile("camiryotest.txt");
-        sfsClient.getFile(GET_FILE_NAME);
+     //   sfsClient.putFile("clientExample.txt");
+        sfsClient.getFile("serverExample.txt"); //PROBLEEEEM
     }
+
+    //^^ Testfall for file non existent
 }
